@@ -8,17 +8,20 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.nt.rookies.asset.exception.NotFoundException;
+import com.nt.rookies.asset.exception.UserException;
+import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@ControllerAdvice
+@RestControllerAdvice
+@AllArgsConstructor
 public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(NotFoundException.class)
@@ -44,5 +47,11 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 				.collect(Collectors.toList());
 		body.put("errors", errors);
 		return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(UserException.class)
+	public ResponseEntity handleUrlException(UserException userException) {
+		return new ResponseEntity<>(userException.getCodeResponse().getMessage(),
+				userException.getCodeResponse().getStatus());
 	}
 }

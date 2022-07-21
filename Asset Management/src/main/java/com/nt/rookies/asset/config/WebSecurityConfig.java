@@ -61,6 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeRequests().antMatchers("/authenticate").permitAll()
+				.antMatchers("/user/**").permitAll()
 				.anyRequest().authenticated();
 
 		// Add a filter to validate the tokens with every request
