@@ -3,31 +3,36 @@ package com.nt.rookies.asset.payload;
 import java.io.Serializable;
 
 public class JwtResponse implements Serializable {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private String username;
+  private String username;
 
-	private String jwtToken;
+  private String jwtToken;
 
-	public JwtResponse(String username, String jwttoken) {
-		this.username = username;
-		setJwtToken(jwttoken);
-	}
+  public JwtResponse(String username, String jwttoken) {
+    this.username = username;
+    setJwtToken(jwttoken);
+  }
 
-	public String getUsername() {
-		return username;
-	}
+  public JwtResponse(String jwtToken) {
+    super();
+    this.jwtToken = jwtToken;
+  }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+  public String getUsername() {
+    return username;
+  }
 
-	public String getJwtToken() {
-		return jwtToken;
-	}
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-	public void setJwtToken(String jwttoken) {
-		this.jwtToken = jwttoken;
-	}
+  public String getJwtToken() {
+    return jwtToken;
+  }
+
+  public void setJwtToken(String jwttoken) {
+    this.jwtToken = jwttoken;
+  }
 
 }

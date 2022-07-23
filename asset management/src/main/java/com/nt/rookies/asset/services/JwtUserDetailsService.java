@@ -28,11 +28,11 @@ public class JwtUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		UserEntity user = userRepository.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-		String ROLE_PREFIX = "ROLE_";
+//		String ROLE_PREFIX = "ROLE_";
 		List<String> roleList = new ArrayList<>();
 		roleList.add(user.getType());
 		List<GrantedAuthority> authorities = roleList.stream()
-				.map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role.toUpperCase()))
+				.map(role -> new SimpleGrantedAuthority(role.toUpperCase()))
 				.collect(Collectors.toList());
 		return new User(username, user.getPassword(), authorities);
 	}
