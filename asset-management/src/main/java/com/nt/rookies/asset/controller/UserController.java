@@ -3,6 +3,7 @@ package com.nt.rookies.asset.controller;
 
 import javax.validation.Valid;
 
+import com.nt.rookies.asset.dto.UpdatePasswordDTO;
 import com.nt.rookies.asset.dto.UserDTO;
 import com.nt.rookies.asset.service.UserService;
 import com.nt.rookies.asset.util.UserFormatUtils;
@@ -38,5 +39,19 @@ public class UserController {
 	ResponseEntity<UserDTO> editUser(@Valid @RequestBody UserDTO user) {
 		UserDTO dto = userService.editUser(user);
 		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+
+	@PutMapping("/change-password")
+	ResponseEntity<?> changePassword(@RequestBody UpdatePasswordDTO passwordDTO){
+		boolean result;
+
+//		try {
+		result = userService.updatePassword(passwordDTO);
+//		} catch (NotFoundException e) {
+//			throw new NotFoundException(e.getMessage());
+//		} catch (Exception ex) {
+//			throw new UserException(UserException.ERR_UPDATE_USER_FAIL);
+//		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }

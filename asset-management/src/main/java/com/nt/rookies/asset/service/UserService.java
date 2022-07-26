@@ -3,7 +3,9 @@ package com.nt.rookies.asset.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
+import com.nt.rookies.asset.dto.UpdatePasswordDTO;
 import com.nt.rookies.asset.dto.UserDTO;
 import com.nt.rookies.asset.entity.UserEntity;
 import com.nt.rookies.asset.exception.UserException;
@@ -120,5 +122,32 @@ public class UserService {
 			throw new UserException(UserException.USER_UPDATE_FAIL);
 		}
 
+	}
+
+	public boolean updatePassword(UpdatePasswordDTO updatePasswordDTO) {
+		boolean result = false;
+		try {
+			Optional<UserEntity> existedUser = userRepository.findById(updatePasswordDTO.getCode());
+			if (!existedUser.isPresent()) {
+				logger.info("User {} not found", updatePasswordDTO.getCode());
+				throw new UserException(UserException.USER_NOT_FOUND);
+			}
+			UserEntity user = existedUser.get();
+			boolean check = this.encoder.matches(updatePasswordDTO.getOldPassword(), user.getPassword());
+			if (check) {
+				user.setPassword(encoder.encode(updatePasswordDTO.getNewPassword()));
+				userRepository.save(user);
+				result = true;
+			} else {
+				throw new UserException(UserException.ERR_WRONG_OLD_PASSWORD);
+			}
+		} catch (UserException ex) {
+			throw new UserException(ex.getCodeResponse());
+		} catch (Exception e) {
+			logger.info("Fail to update user {}", updatePasswordDTO.getCode());
+			throw new UserException(UserException.ERR_UPDATE_USER_FAIL);
+		}
+
+		return result;
 	}
 }
