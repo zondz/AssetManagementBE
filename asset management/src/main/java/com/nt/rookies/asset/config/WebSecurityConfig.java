@@ -57,6 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity httpSecurity) throws Exception {
 
     httpSecurity.authorizeRequests().antMatchers("/authenticate", "/authenticate/").permitAll();
+    httpSecurity.authorizeRequests().antMatchers("/UpdatePasswordFirstTime", "/UpdatePasswordFirstTime/").permitAll();
 
     httpSecurity.csrf().disable().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
 	.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler).and().sessionManagement()

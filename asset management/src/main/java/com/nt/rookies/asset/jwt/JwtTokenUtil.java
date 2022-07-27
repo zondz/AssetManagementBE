@@ -6,9 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import com.nt.rookies.asset.entities.UserEntity;
+import com.nt.rookies.asset.services.UserService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -25,6 +29,9 @@ public class JwtTokenUtil implements Serializable {
 
   @Value("${app.jwtExpirationMs}")
   private long expiredTime;
+
+  @Autowired
+  private UserService userService;
 
   /**
    * Retrieve username from jwt token
@@ -71,9 +78,11 @@ public class JwtTokenUtil implements Serializable {
   }
 
   public String generateToken(UserDetails userDetails) {
+    UserEntity userEntity = userService.findByUsername(userDetails.getUsername());
     Map<String, Object> claims = new HashMap<>();
     claims.put("org", "nashtech");
     claims.put("role", userDetails.getAuthorities());
+    claims.put("firstTimeLogin", userEntity.getFirstLogin());
     return generateToken(claims, userDetails.getUsername());
   }
 
