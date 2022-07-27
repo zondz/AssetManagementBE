@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+import com.nt.rookies.asset.dto.CheckPasswordDTO;
 import com.nt.rookies.asset.dto.UpdatePasswordDTO;
 import com.nt.rookies.asset.dto.UserDTO;
 import com.nt.rookies.asset.entity.UserEntity;
@@ -146,6 +147,25 @@ public class UserService {
 		} catch (Exception e) {
 			logger.info("Fail to update user {}", updatePasswordDTO.getCode());
 			throw new UserException(UserException.ERR_UPDATE_USER_FAIL);
+		}
+
+		return result;
+	}
+	public String checkPassword(CheckPasswordDTO checkPasswordDTO) {
+		String result = "";
+		try {
+			Optional<UserEntity> existedUser = userRepository.findById(checkPasswordDTO.getCode());
+			if (!existedUser.isPresent()) {
+				logger.info("User {} not found", checkPasswordDTO.getCode());
+				throw new UserException(UserException.USER_NOT_FOUND);
+			}
+			UserEntity user = existedUser.get();
+			boolean check = this.encoder.matches(checkPasswordDTO.getOldPassword(), user.getPassword());
+			if (!check) {
+				result = "Password is incorrect";
+			}
+		} catch (UserException ex) {
+			throw new UserException(ex.getCodeResponse());
 		}
 
 		return result;

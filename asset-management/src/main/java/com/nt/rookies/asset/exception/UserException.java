@@ -62,7 +62,6 @@ public class UserException extends RuntimeException {
 	public static final CodeResponse USER_UPDATE_FAIL
 			= new CodeResponse("USER-12", "Update User fail", HttpStatus.INTERNAL_SERVER_ERROR);
 
-
 	public static final CodeResponse ERR_WRONG_OLD_PASSWORD
 			= new CodeResponse("USER-06", "Password is incorrect", HttpStatus.BAD_REQUEST);
 
